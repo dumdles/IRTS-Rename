@@ -81,7 +81,7 @@
             const reportCount = document.getElementById('report_count').value;
             const customerName = document.getElementById('customer_name').value;
 
-            fetch('http://127.0.0.1:5000/create-folders', {
+            fetch('/create-folders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
