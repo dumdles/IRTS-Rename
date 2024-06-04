@@ -12,7 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/mortezaom/google-sans-cdn@master/fonts.css" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Google+Sans+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700" />
     <link rel="stylesheet" href="/static/styles.css">
     <title>Folder Create</title>
 </head>
@@ -20,8 +21,9 @@
 <body>
     <div class="container">
         <form id="createFolderForm">
-            <h1>Folder Create</h1>
-
+            <h1>AC Tesla Report Folder Create</h1>
+            <p>This internal tool is used for creating new report folders in the NAS, following the naming conventions.
+            </p>
             <div class="mb-3">
                 <label for="report_type">Report Type</label>
                 <div class="form-check">
@@ -51,15 +53,16 @@
                 <div class="col">
                     <label for="report_count">Report Count</label>
                     <input class="form-control" type="number" id="report_count" name="report_count" required>
+                    <div class="form-text">
+                        nth form of the month
+                    </div>
                 </div>
+
             </div>
 
             <div class="mt-3">
                 <label for="customer_name">Customer Name:</label>
                 <input class="form-control" type="text" id="customer_name" name="customer_name" required>
-            </div>
-            <div class="form-text">
-                Please ensure the customer name is spelled accurately
             </div>
 
             <div class="mt-3 mb-3">
