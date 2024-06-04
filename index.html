@@ -18,7 +18,7 @@
     <form id="renameForm">
         <div class="mb-3">
             <label for="folder_path">Folder Path</label>
-            <input type="text" id="folder_path" name="folder_path" required>
+            <input class="form-control" type="text" id="folder_path" name="folder_path" required>
         </div>
 
         <div class="mb-3">
@@ -31,6 +31,11 @@
             <input type="text" id="report_count" name="report_count" required>
         </div>
 
+        <div>
+            <label for="destination_dir">Destination Directory:</label>
+            <input type="text" id="destination_dir" name="destination_dir" required>
+        </div>
+
         <button type="submit">Rename</button>
     </form>
     <p id="message"></p>
@@ -39,10 +44,11 @@
         document.getElementById("renameForm").addEventListener('submit', function (e) {
             e.preventDefault();
             const folderPath = document.getElementById('folder_path').value;
-            const companyInitials = document.getElementById('company_details').value;
+            const companyInitials = document.getElementById('company_initials').value;
             const reportCount = document.getElementById('report_count').value;
+            const destinationDir = document.getElementById('destination_dir').value;
 
-            fetch('/rename-folders', {
+            fetch('http://127.0.0.1:5000/rename-folders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
