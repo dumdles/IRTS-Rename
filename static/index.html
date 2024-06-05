@@ -23,6 +23,7 @@
         <form id="createFolderForm">
             <h1>AC Tesla Report Folder Create</h1>
             <p>This internal tool is used for creating new report folders in the NAS, following the naming conventions.
+                <br>Note: In order for this to work properly, <b>the NAS has to be mapped as F:/ on your local system!</b>
             </p>
             <div class="mb-3">
                 <label for="report_type">Report Type</label>
@@ -66,7 +67,7 @@
 
             <div class="row mt-3">
                 <div class="col">
-                    <label for="customer_name">Customer Name:</label>
+                    <label for="customer_name">Customer Name (letters and numbers only):</label>
                     <input class="form-control" type="text" id="customer_name" name="customer_name" required>
                 </div>
 
@@ -86,7 +87,7 @@
                 <input class="form-control" type="text" id="final_folder_name" disabled readonly>
             </div>
 
-            <button class="btn btn-primary mt-3" type="submit">Create Folder</button>
+            <button class="btn btn-primary mt-3" type="submit" id="create_folder_btn">Create Folder</button>
         </form>
         <p id="message"></p>
 
