@@ -39,12 +39,16 @@
                     <input class="form-check-input" type="radio" id="report_type" name="report_type" value="PQA">
                     <label class="form-check-label" for="report_type">PQA</label>
                 </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="report_type" name="report_type" value="PD">
+                    <label class="form-check-label" for="report_type">PD</label>
+                </div>
 
             </div>
 
             <div class="row">
                 <div class="col">
-                    <label for="company_initials">Company Initials</label>
+                    <label for="company_initials">Company</label>
                     <select class="form-select" id="company_initials">
                         <option value="ACT" selected>ACT</option>
                         <option value="I2R">I2R</option>
@@ -54,18 +58,30 @@
                     <label for="report_count">Report Count</label>
                     <input class="form-control" type="number" id="report_count" name="report_count" required>
                     <div class="form-text">
-                        nth form of the month
+                        nth report of the month
                     </div>
                 </div>
 
             </div>
 
-            <div class="mt-3">
-                <label for="customer_name">Customer Name:</label>
-                <input class="form-control" type="text" id="customer_name" name="customer_name" required>
+            <div class="row mt-3">
+                <div class="col">
+                    <label for="customer_name">Customer Name:</label>
+                    <input class="form-control" type="text" id="customer_name" name="customer_name" required>
+                </div>
+
+                <div class="col">
+                    <label for="inspection_start_date">Inspection Start Date:</label>
+                    <input type="date" class="form-control" id="inspection_start_date" required>
+                </div>
+
+                <div class="col">
+                    <label for="inspection_end_date">Inspection End Date:</label>
+                    <input type="date" class="form-control" id="inspection_end_date">
+                </div>
             </div>
 
-            <div class="mt-3 mb-3">
+            <div class="mt-4 mb-1">
                 <label for="final_folder_name">Folder Name Preview:</label>
                 <input class="form-control" type="text" id="final_folder_name" disabled readonly>
             </div>
@@ -84,17 +100,15 @@
             const reportCount = document.getElementById('report_count').value;
             const customerName = document.getElementById('customer_name').value;
 
+            const inspectionStartDate = document.getElementById('inspection_start_date').value;
+            const inspectionEndDate = document.getElementById('inspection_end_date').value;
+
             fetch('/create-folders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    report_type: reportType,
-                    company_initials: companyInitials,
-                    report_count: reportCount,
-                    customer_name: customerName
-                })
+                body: JSON.stringify(data)
             })
                 .then(response => response.json())
                 .then(data => {
@@ -112,7 +126,48 @@
             const reportCount = document.getElementById('report_count').value;
             const customerName = document.getElementById('customer_name').value;
 
-            const finalFolderName = `${reportType}-${getYearMonth()}-${reportCount}-${companyInitials} @ ${customerName}`;
+            const inspectionStartDate = document.getElementById('inspection_start_date').value;
+            const inspectionEndDate = document.getElementById('inspection_end_date').value;
+
+            // Function to format a date string (YYYY-MM-DD) to (DD.MM.YY)
+            // Used for the Inspection Dates
+            function formatDate(dateString) {
+                if (dateString) { // Check if dateString is not empty
+                    const dateParts = dateString.split('-');
+                    const day = dateParts[2].padStart(2, '0');
+                    const month = dateParts[1].padStart(2, '0');
+                    const year = dateParts[0].slice(-2);
+                    return `${day}.${month}.${year}`;
+                } else {
+                    // Return an empty string or some placeholder if no date entered
+                    return '';  // Or any placeholder text you prefer
+                }
+            }
+
+            let finalFolderName;
+            if (inspectionEndDate) {
+                const formattedStartDate = formatDate(inspectionStartDate);
+                const formattedEndDate = formatDate(inspectionEndDate);
+                finalFolderName = `${reportType}-${getYearMonth()}-${reportCount}-${companyInitials} @ ${formattedStartDate} to ${formattedEndDate}_${customerName}`;
+                data = {
+                    report_type: reportType,
+                    company_initials: companyInitials,
+                    report_count: reportCount,
+                    customer_name: customerName,
+                    inspection_start_date: formattedStartDate,  // Add formatted start date
+                    inspection_end_date: formattedEndDate,    // Add formatted end date (if provided)
+                };
+            } else {
+                const formattedStartDate = formatDate(inspectionStartDate);
+                finalFolderName = `${reportType}-${getYearMonth()}-${reportCount}-${companyInitials} @ ${formattedStartDate}_${customerName}`;
+                data = {
+                    report_type: reportType,
+                    company_initials: companyInitials,
+                    report_count: reportCount,
+                    customer_name: customerName,
+                    inspection_start_date: formattedStartDate  // Add formatted start date
+                };
+            }
             console.log('Final Folder Name:', finalFolderName);
             document.getElementById('final_folder_name').value = finalFolderName;
         }
@@ -132,6 +187,8 @@
             document.getElementById('company_initials').addEventListener('change', generateFinalFolderName);
             document.getElementById('report_count').addEventListener('input', generateFinalFolderName);
             document.getElementById('customer_name').addEventListener('input', generateFinalFolderName);
+            document.getElementById('inspection_start_date').addEventListener('input', generateFinalFolderName);
+            document.getElementById('inspection_end_date').addEventListener('input', generateFinalFolderName);
         });
 
     </script>

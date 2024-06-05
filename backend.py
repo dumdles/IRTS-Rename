@@ -19,6 +19,9 @@ def create_folders():
     report_count = data['report_count']
     customer_name = data['customer_name']
 
+    inspection_start_date = data.get('inspection_start_date')
+    inspection_end_date = data.get('inspection_end_date')
+
     current_date = datetime.now()
     year = current_date.strftime("%Y")
     month = current_date.strftime("%m")
@@ -35,10 +38,21 @@ def create_folders():
     elif report_type == "PQA":
         folder_path = os.path.join(base_folder_path, report_type, year)
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
+    elif report_type == "PD":
+        folder_path = os.path.join(base_folder_path, report_type, year)
+        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     else:
         return jsonify({"message": "Invalid report type", "error": True}), 400
 
-    new_folder_name = f"{report_folder_name}-{company_initials} @ {customer_name}"
+    new_folder_name = f"{report_folder_name}-{company_initials} @ "
+    if inspection_start_date:
+        new_folder_name += f"{inspection_start_date}"
+        if inspection_end_date:
+            new_folder_name += f" to {inspection_end_date}"
+    else:
+        new_folder_name += ""
+        pass
+    new_folder_name += f"_{customer_name}"
     final_folder_path = os.path.join(folder_path, new_folder_name)
 
     try:
