@@ -20,10 +20,11 @@
 
 <body>
     <div class="container">
-        <form id="createFolderForm">
+        <form id="createFolderForm" enctype="multipart/form-data">
             <h1>AC Tesla Report Folder Create</h1>
             <p>This internal tool is used for creating new report folders in the NAS, following the naming conventions.
-                <br>Note: In order for this to work properly, <b>the NAS has to be mapped as F:/ on your local system!</b>
+                <br>Note: In order for this to work properly, <b>the NAS has to be mapped as F:/ on your local
+                    system!</b>
             </p>
             <div class="mb-3">
                 <label for="report_type">Report Type</label>
@@ -49,8 +50,13 @@
 
             <div class="row">
                 <div class="col">
+                    <label for="files">Select files to upload (optional):</label>
+                    <input type="file" id="files" name="files" class="form-control" multiple>
+                </div>
+
+                <div class="col">
                     <label for="company_initials">Company</label>
-                    <select class="form-select" id="company_initials">
+                    <select name="company_initials" class="form-select" id="company_initials">
                         <option value="ACT" selected>ACT</option>
                         <option value="I2R">I2R</option>
                     </select>
@@ -104,12 +110,26 @@
             const inspectionStartDate = document.getElementById('inspection_start_date').value;
             const inspectionEndDate = document.getElementById('inspection_end_date').value;
 
+            const files = document.getElementById('files').files;
+            // Prepare the FormData object
+            const formData = new FormData(this);
+
+            // Append other form data to FormData
+            formData.append('report_type', reportType);
+            formData.append('company_initials', companyInitials);
+            formData.append('report_count', reportCount);
+            formData.append('customer_name', customerName);
+            formData.append('inspection_start_date', inspectionStartDate);
+            formData.append('inspection_end_date', inspectionEndDate);
+
+            // Append selected files to FormData (loop if multiple files allowed)
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
             fetch('/create-folders', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+                body: formData
             })
                 .then(response => response.json())
                 .then(data => {

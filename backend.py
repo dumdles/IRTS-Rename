@@ -3,6 +3,8 @@ from flask_cors import CORS
 import os
 from datetime import datetime
 import re
+from shutil import copy2
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -14,7 +16,8 @@ def serve_index():
 
 @app.route('/create-folders', methods=['POST'])
 def create_folders():
-    data = request.json
+    data = request.form # Access form data, including files
+    files = request.files.getlist('files') # Get a list of uploaded files
 
     # Check for missing or empty customer_name
     if 'customer_name' not in data or not data['customer_name'].strip():
@@ -53,12 +56,22 @@ def create_folders():
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     else:
         return jsonify({"message": "Invalid report type", "error": True}), 400
+    
+    # Format inspection dates
+    def format_date(date_str):
+        if date_str:
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+            return date_obj.strftime("%d.%m.%y")
+        return ""
+    
+    formatted_start_date = format_date(inspection_start_date)
+    formatted_end_date = format_date(inspection_end_date)
 
     new_folder_name = f"{report_folder_name}-{company_initials} @ "
-    if inspection_start_date:
-        new_folder_name += f"{inspection_start_date}"
-        if inspection_end_date:
-            new_folder_name += f" to {inspection_end_date}"
+    if formatted_start_date:
+        new_folder_name += f"{formatted_start_date}"
+        if formatted_end_date:
+            new_folder_name += f" to {formatted_end_date}"
     else:
         new_folder_name += ""
         pass
@@ -68,9 +81,21 @@ def create_folders():
     try:
         os.makedirs(os.path.dirname(final_folder_path), exist_ok=True)
         os.makedirs(final_folder_path, exist_ok=True)
-        return jsonify({"message": "Folder created successfully", "new_folder_path": final_folder_path})
+
+        # Process uploaded files only if there are files to upload
+        if files:
+            for file in files:
+                if file.filename:  # Ensure the filename is not empty
+                    filename = secure_filename(file.filename)
+                    destination_path = os.path.join(final_folder_path, filename)
+                    try:
+                        file.save(destination_path)  # Save the file to the destination path
+                    except Exception as e:
+                        return jsonify({"message": f"Error copying file {filename}: {str(e)}", "error": True}), 400
+
+        return jsonify({"message": "Folder created and files uploaded successfully", "new_folder_path": final_folder_path})
     except Exception as e:
-        return jsonify({"message": f"Folder creation failed: str(e)", "error": True}), 400
-    
+        return jsonify({"message": f"Folder creation failed: {str(e)}", "error": True}), 400
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
