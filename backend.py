@@ -56,12 +56,22 @@ def create_folders():
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     else:
         return jsonify({"message": "Invalid report type", "error": True}), 400
+    
+    # Format inspection dates
+    def format_date(date_str):
+        if date_str:
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+            return date_obj.strftime("%d.%m.%y")
+        return ""
+    
+    formatted_start_date = format_date(inspection_start_date)
+    formatted_end_date = format_date(inspection_end_date)
 
     new_folder_name = f"{report_folder_name}-{company_initials} @ "
-    if inspection_start_date:
-        new_folder_name += f"{inspection_start_date}"
-        if inspection_end_date:
-            new_folder_name += f" to {inspection_end_date}"
+    if formatted_start_date:
+        new_folder_name += f"{formatted_start_date}"
+        if formatted_end_date:
+            new_folder_name += f" to {formatted_end_date}"
     else:
         new_folder_name += ""
         pass
