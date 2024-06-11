@@ -98,4 +98,12 @@ def create_folders():
         return jsonify({"message": f"Folder creation failed: {str(e)}", "error": True}), 400
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    cert_path = r'C:\Program Files\OpenSSL-Win64\bin\PEM\cert.pem'
+    key_path = r'C:\Program Files\OpenSSL-Win64\bin\PEM\key.pem'
+    
+    if os.path.exists(cert_path) and os.path.exists(key_path):
+        print(f"Using SSL cert: {cert_path} and key: {key_path}")
+    else:
+        print(f"SSL cert or key not found at paths: {cert_path}, {key_path}")
+    
+    app.run(debug=True, host="0.0.0.0", port=5000, ssl_context=(cert_path, key_path))
