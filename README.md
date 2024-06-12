@@ -61,7 +61,7 @@ Create the Folder
 
 Click the "Create Folder" button. The tool will create the folder with the specified naming convention and upload the files if provided.
 
-API Endpoints
+## API Endpoints
 Create Folders
 URL: /create-folders
 Method: POST
@@ -77,7 +77,8 @@ inspection_end_date: The end date of the inspection (optional).
 Response:
 message: A success or error message.
 new_folder_path: The path of the newly created folder (on success).
-Contributing
+
+## Contributing
 We welcome contributions! Please follow these steps:
 
 Fork the repository.
@@ -85,7 +86,8 @@ Create a new branch (git checkout -b feature-branch).
 Commit your changes (git commit -m 'Add new feature').
 Push to the branch (git push origin feature-branch).
 Open a Pull Request.
-License
+
+## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 Developed by dumdles
