@@ -53,7 +53,7 @@ def create_folders():
             return jsonify({"message": "Inspection end date cannot be before the inspection start date!", "error": True}), 400
 
     # Update base folder path based on report type
-    base_folder_path = os.path.normpath("F:/Reports2")  # Change folder location here, if needed
+    base_folder_path = os.path.normpath("F:/Reports")  # Change folder location here, if needed
     if report_type in ["IRTS", "PQA", "ELP", "PD", "DGA"]:
         folder_path = os.path.join(base_folder_path, report_type, year)
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
