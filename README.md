@@ -34,9 +34,7 @@ Welcome to the **AC Tesla Report Folder Create** tool! This internal tool is des
 
 1. **Clone the Repository**
    ```
-   git clone https://github.com/dumdles/IRTS-Rename.git
-   cd yourrepository
-   
+   git clone https://github.com/dumdles/IRTS-Rename.git   
 2. **Install Dependencies**  
 ```pip install -r requirements.txt```
 
@@ -80,13 +78,13 @@ Request Data:
 ## Contributing
 We welcome contributions! Please follow these steps:
 
-Fork the repository.
-Create a new branch (git checkout -b feature-branch).
-Commit your changes (git commit -m 'Add new feature').
-Push to the branch (git push origin feature-branch).
-Open a Pull Request.
+- Fork the repository.
+- Create a new branch (git checkout -b feature-branch).
+- Commit your changes (git commit -m 'Add new feature').
+- Push to the branch (git push origin feature-branch).
+- Open a Pull Request.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-Developed by dumdles
+Developed by Dylan Chong (dumdles).

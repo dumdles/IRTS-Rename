@@ -41,17 +41,20 @@ def create_folders():
     report_number = str(report_count).zfill(2)
 
     # Update base folder path based on report type
-    base_folder_path = os.path.normpath("F:/Reports2")
+    base_folder_path = os.path.normpath("F:/Reports2")      # Change folder location here, if needed
     if report_type == "IRTS":
-        folder_path = os.path.join(base_folder_path, report_type, year)
-        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
-    elif report_type == "DGA":
         folder_path = os.path.join(base_folder_path, report_type, year)
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     elif report_type == "PQA":
         folder_path = os.path.join(base_folder_path, report_type, year)
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
+    elif report_type == "ELP":
+        folder_path = os.path.join(base_folder_path, report_type, year)
+        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     elif report_type == "PD":
+        folder_path = os.path.join(base_folder_path, report_type, year)
+        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
+    elif report_type == "DGA":
         folder_path = os.path.join(base_folder_path, report_type, year)
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     else:
