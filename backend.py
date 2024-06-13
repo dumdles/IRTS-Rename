@@ -38,7 +38,7 @@ def create_folders():
       return jsonify({"message": "Customer name is required!", "error": True}), 400
 
     # Validate customer name for alphanumeric characters only
-    if not re.match(r"^[a-zA-Z0-9]+$", customer_name):
+    if not re.match(r"^[a-zA-Z0-9 ]+$", customer_name):
         return jsonify({"message": "Customer name must contain only alphanumeric characters!", "error": True}), 400
     
     # Validate Dates
