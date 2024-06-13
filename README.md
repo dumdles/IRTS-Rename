@@ -37,46 +37,45 @@ Welcome to the **AC Tesla Report Folder Create** tool! This internal tool is des
    git clone https://github.com/dumdles/IRTS-Rename.git
    cd yourrepository
    
-2. **Install Dependencies**
+2. **Install Dependencies**  
 ```pip install -r requirements.txt```
-3. **Run the Flask Server**
+
+3. **Run the Flask Server**  
 ```python backend.py```
-4. **Access the Application**
+
+4. **Access the Application**  
 Open your web browser and go to http://localhost:5000.
 
-5. **Usage**
-Open the Application
+5. **Usage**  
+   - Open the Application  
+   - Open your web browser and navigate to http://localhost:5000.  
+   - Fill in the Form  
+   - Select the report type (IRTS, DGA, PQA, PD).  
+   - Select files to upload (optional).  
+   - Choose the company initials.  
+   - Enter the report count.  
+   - Enter the customer name (letters and numbers only).  
+   - Select the inspection start date and end date (if applicable).  
+   - Create the Folder  
 
-Open your web browser and navigate to http://localhost:5000.
-
-Fill in the Form
-
-Select the report type (IRTS, DGA, PQA, PD).
-Select files to upload (optional).
-Choose the company initials.
-Enter the report count.
-Enter the customer name (letters and numbers only).
-Select the inspection start date and end date (if applicable).
-Create the Folder
-
-Click the "Create Folder" button. The tool will create the folder with the specified naming convention and upload the files if provided.
+   - Click the "Create Folder" button. The tool will create the folder with the specified naming convention and upload the files if provided.  
 
 ## API Endpoints
-Create Folders
-URL: /create-folders
-Method: POST
-Description: Creates a new folder and uploads files based on the provided form data.
-Request Data:
-report_type: The type of the report (IRTS, DGA, PQA, PD).
-files: The files to be uploaded (optional).
-company_initials: The initials of the company.
-report_count: The report count for the month.
-customer_name: The name of the customer (letters and numbers only).
-inspection_start_date: The start date of the inspection.
-inspection_end_date: The end date of the inspection (optional).
-Response:
-message: A success or error message.
-new_folder_path: The path of the newly created folder (on success).
+**Create Folders**  
+URL: /create-folders  
+Method: POST  
+Description: Creates a new folder and uploads files based on the provided form data.  
+Request Data:  
+```report_type```: The type of the report (IRTS, DGA, PQA, PD).
+```files```: The files to be uploaded (optional).  
+```company_initials```: The initials of the company.  
+```report_count```: The report count for the month.  
+```customer_name```: The name of the customer (letters and numbers only).  
+```inspection_start_date```: The start date of the inspection.  
+```inspection_end_date```: The end date of the inspection (optional).  
+```Response```:  
+```message```: A success or error message.  
+```new_folder_path```: The path of the newly created folder (on success).
 
 ## Contributing
 We welcome contributions! Please follow these steps:
