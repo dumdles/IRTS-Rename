@@ -104,12 +104,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="successModalLabel">Success!</h3>
+                    <h3 class="modal-title" id="successModalLabel">Message</h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p id="modal-message"></p>
-                    <a>New folder path:</a>
+                    <a id="new-folder-path-label" style="display: none;">New folder path:</a>
                     <p id="modal-new-folder-path"></p>
                 </div>
             </div>
@@ -153,20 +153,29 @@
                 .then(data => {
                     console.log(data);  // Add this line to check the response
                     const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+
                     if (data.error) {
-                        // Handle errors (optional)
+                        // Handle errors
+                        document.getElementById('successModalLabel').textContent = "An error occurred";
                         document.getElementById('modal-message').textContent = data.message;
-                        successModal.show();
+                        document.getElementById('modal-new-folder-path').textContent = "";
                     } else {
                         // Show success modal
+                        document.getElementById('successModalLabel').textContent = "Folder created successfully";
                         document.getElementById('modal-message').textContent = data.message;
+                        document.getElementById('new-folder-path-label').style.display = 'block';
                         document.getElementById('modal-new-folder-path').textContent = data.new_folder_path;
-                        successModal.show();
                     }
+
+                    successModal.show();
+
                 })
                 .catch(error => {
                     console.error(error); // Log any errors to the console
+                    document.getElementById('successModalLabel').textContent = "An error occurred";
                     document.getElementById('modal-message').textContent = "An error occurred. Please try again.";
+                    document.getElementById('modal-new-folder-path').textContent = "";
+                    document.getElementById('new-folder-path-label').style.display = 'none'; // Hide new folder path label
                     const successModal = new bootstrap.Modal(document.getElementById('successModal'));
                     successModal.show();
                 });
@@ -242,6 +251,11 @@
             document.getElementById('customer_name').addEventListener('input', generateFinalFolderName);
             document.getElementById('inspection_start_date').addEventListener('input', generateFinalFolderName);
             document.getElementById('inspection_end_date').addEventListener('input', generateFinalFolderName);
+
+            // Set inspection_start_date to today's date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inspection_start_date').value = today;
+
         });
 
     </script>

@@ -19,14 +19,6 @@ def create_folders():
     data = request.form # Access form data, including files
     files = request.files.getlist('files') # Get a list of uploaded files
 
-    # Check for missing or empty customer_name
-    if 'customer_name' not in data or not data['customer_name'].strip():
-      return jsonify({"message": "Customer name is required", "error": True}), 400
-
-    # Validate customer name for letters and numbers only (no special characters)
-    if not re.match(r"[^\\/:<>?*\"]+", data['customer_name']):
-      return jsonify({"message": "Customer name has invalid characters", "error": True}), 400
-
     report_type = data['report_type']
     company_initials = data['company_initials']
     report_count = data['report_count']
@@ -34,27 +26,35 @@ def create_folders():
 
     inspection_start_date = data.get('inspection_start_date')
     inspection_end_date = data.get('inspection_end_date')
-
+        
+    # Continue with folder creation logic
     current_date = datetime.now()
     year = current_date.strftime("%Y")
     month = current_date.strftime("%m")
     report_number = str(report_count).zfill(2)
 
+    # Check for missing or empty customer_name
+    if 'customer_name' not in data or not data['customer_name'].strip():
+      return jsonify({"message": "Customer name is required!", "error": True}), 400
+
+    # Validate customer name for alphanumeric characters only
+    if not re.match(r"^[a-zA-Z0-9]+$", customer_name):
+        return jsonify({"message": "Customer name must contain only alphanumeric characters!", "error": True}), 400
+    
+    # Validate Dates
+    if inspection_start_date:
+        start_date_obj = datetime.strptime(inspection_start_date, "%Y-%m-%d")
+    else:
+        return jsonify({"message": "Inspection start date is required!", "error": True}), 400
+    
+    if inspection_end_date:
+        end_date_obj = datetime.strptime(inspection_end_date, "%Y-%m-%d")
+        if end_date_obj < start_date_obj:
+            return jsonify({"message": "Inspection end date cannot be before the inspection start date!", "error": True}), 400
+
     # Update base folder path based on report type
-    base_folder_path = os.path.normpath("F:/Reports2")      # Change folder location here, if needed
-    if report_type == "IRTS":
-        folder_path = os.path.join(base_folder_path, report_type, year)
-        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
-    elif report_type == "PQA":
-        folder_path = os.path.join(base_folder_path, report_type, year)
-        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
-    elif report_type == "ELP":
-        folder_path = os.path.join(base_folder_path, report_type, year)
-        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
-    elif report_type == "PD":
-        folder_path = os.path.join(base_folder_path, report_type, year)
-        report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
-    elif report_type == "DGA":
+    base_folder_path = os.path.normpath("F:/Reports2")  # Change folder location here, if needed
+    if report_type in ["IRTS", "PQA", "ELP", "PD", "DGA"]:
         folder_path = os.path.join(base_folder_path, report_type, year)
         report_folder_name = f"{report_type}-{year[2:]}{month}-{report_number}"
     else:
