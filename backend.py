@@ -106,5 +106,4 @@ if __name__ == "__main__":
     else:
         print(f"SSL cert or key not found at paths: {cert_path}, {key_path}")
     
-    app.run(debug=True, host="0.0.0.0", port=5000)
-    # , ssl_context=(cert_path, key_path)
+    app.run(debug=True, host="0.0.0.0", port=5000, ssl_context=(cert_path, key_path))
