@@ -23,8 +23,6 @@
         <form id="createFolderForm" enctype="multipart/form-data">
             <h1>AC Tesla Report Folder Create</h1>
             <p>This internal tool is used for creating new report folders in the NAS, following the naming conventions.
-                <br>Note: In order for this to work properly, <b>the NAS has to be mapped as F:/ on your local
-                    system!</b>
             </p>
             <div class="mb-3">
                 <label for="report_type">Report Type</label>
@@ -45,7 +43,6 @@
                     <input class="form-check-input" type="radio" id="report_type" name="report_type" value="PD">
                     <label class="form-check-label" for="report_type">PD</label>
                 </div>
-
             </div>
 
             <div class="row">
@@ -95,8 +92,24 @@
 
             <button class="btn btn-primary mt-3" type="submit" id="create_folder_btn">Create Folder</button>
         </form>
-        <p id="message"></p>
 
+    </div>
+
+    <!-- Bootstrap modal for success message -->
+    <div id="successModal" tabindex="-1" class="modal fade" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="successModalLabel">Success!</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-message"></p>
+                    <a>New folder path:</a>
+                    <p id="modal-new-folder-path"></p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -127,16 +140,31 @@
                 formData.append('files', files[i]);
             }
 
+
             fetch('/create-folders', {
                 method: 'POST',
                 body: formData
             })
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('message').textContent = data.message;
+                    console.log(data);  // Add this line to check the response
+                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    if (data.error) {
+                        // Handle errors (optional)
+                        document.getElementById('modal-message').textContent = data.message;
+                        successModal.show();
+                    } else {
+                        // Show success modal
+                        document.getElementById('modal-message').textContent = data.message;
+                        document.getElementById('modal-new-folder-path').textContent = data.new_folder_path;
+                        successModal.show();
+                    }
                 })
                 .catch(error => {
-                    document.getElementById('message').textContent = 'Error: ' + error.message;
+                    console.error(error); // Log any errors to the console
+                    document.getElementById('modal-message').textContent = "An error occurred. Please try again.";
+                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    successModal.show();
                 });
         });
 

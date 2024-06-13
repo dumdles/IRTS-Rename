@@ -93,7 +93,7 @@ def create_folders():
                     except Exception as e:
                         return jsonify({"message": f"Error copying file {filename}: {str(e)}", "error": True}), 400
 
-        return jsonify({"message": "Folder created and files uploaded successfully", "new_folder_path": final_folder_path})
+        return jsonify({"message": "Folder created and files uploaded successfully!", "new_folder_path": final_folder_path})
     except Exception as e:
         return jsonify({"message": f"Folder creation failed: {str(e)}", "error": True}), 400
 
@@ -106,4 +106,5 @@ if __name__ == "__main__":
     else:
         print(f"SSL cert or key not found at paths: {cert_path}, {key_path}")
     
-    app.run(debug=True, host="0.0.0.0", port=5000, ssl_context=(cert_path, key_path))
+    app.run(debug=True, host="0.0.0.0", port=5000)
+    # , ssl_context=(cert_path, key_path)
